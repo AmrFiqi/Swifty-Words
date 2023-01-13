@@ -63,6 +63,27 @@ class ViewController: UIViewController {
         clear.setTitle("CLEAR", for: .normal)
         view.addSubview(clear)
         
+        // Creating buttons containers for the 20 buttons that will be created
+        let buttonView = UIView()
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(buttonView)
+        
+        // Create 20 buttons to put inside the button container
+        let buttonWidth = 200
+        let buttonHeight = 80
+        
+        for row in 0..<4 {
+            for column in 0..<5 {
+                let letterButton = UIButton(type: .system)
+                letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
+                letterButton.setTitle("WWW", for: .normal)
+                
+                let frame  = CGRect(x: column * buttonWidth, y: row * buttonHeight, width: buttonWidth, height: buttonHeight)
+                letterButton.frame = frame
+                buttonView.addSubview(letterButton)
+                letterButtons.append(letterButton)
+            }
+        }
         
         
         NSLayoutConstraint.activate([
@@ -90,9 +111,17 @@ class ViewController: UIViewController {
             clear.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
             clear.heightAnchor.constraint(equalToConstant: 44),
             
-            
+            buttonView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.75),
+            buttonView.heightAnchor.constraint(equalToConstant: 320),
+            buttonView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonView.topAnchor.constraint(equalTo: submit.bottomAnchor, constant: 20),
+            buttonView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -25)
         
         ])
+        buttonView.backgroundColor = .green
+        
+        cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
+        answerLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
     }
     
     override func viewDidLoad() {
