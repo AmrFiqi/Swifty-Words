@@ -10,7 +10,7 @@ import UIKit
 class ViewController: UIViewController {
     var cluesLabel: UILabel!
     var answerLabel: UILabel!
-    var currentAnswer: UILabel!
+    var currentAnswer: UITextField!
     var scoreLabel: UILabel!
     var letterButtons = [UIButton]()
     
@@ -29,7 +29,7 @@ class ViewController: UIViewController {
         cluesLabel = UILabel()
         cluesLabel.translatesAutoresizingMaskIntoConstraints = false
         cluesLabel.font = UIFont.systemFont(ofSize: 24)
-        cluesLabel.text = "Clues"
+        cluesLabel.text = "CLUES"
         cluesLabel.numberOfLines = 0
         view.addSubview(cluesLabel)
         
@@ -37,11 +37,32 @@ class ViewController: UIViewController {
         answerLabel = UILabel()
         answerLabel.translatesAutoresizingMaskIntoConstraints = false
         answerLabel.font = UIFont.systemFont(ofSize: 24)
-        answerLabel.text = "Answers"
+        answerLabel.text = "ANSWERS"
+        answerLabel.textAlignment = .right
         answerLabel.numberOfLines = 0
         view.addSubview(answerLabel)
         
         // Current answer label specs
+        currentAnswer = UITextField()
+        currentAnswer.translatesAutoresizingMaskIntoConstraints = false
+        currentAnswer.placeholder = "Tap the letters to guess"
+        currentAnswer.textAlignment = .center
+        currentAnswer.font = UIFont.systemFont(ofSize: 44)
+        currentAnswer.isUserInteractionEnabled = false
+        view.addSubview(currentAnswer)
+        
+        // Submit answer button
+        let submit = UIButton(type: .system)
+        submit.translatesAutoresizingMaskIntoConstraints = false
+        submit.setTitle("SUBMIT", for: .normal)
+        view.addSubview(submit)
+        
+        // Clear Answer button
+        let clear = UIButton(type: .system)
+        clear.translatesAutoresizingMaskIntoConstraints = false
+        clear.setTitle("CLEAR", for: .normal)
+        view.addSubview(clear)
+        
         
         
         NSLayoutConstraint.activate([
@@ -53,9 +74,23 @@ class ViewController: UIViewController {
             cluesLabel.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.6, constant: -100),
             
             answerLabel.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor),
-            answerLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: 100),
+            answerLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor, constant: -100),
             answerLabel.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.4, constant: -100),
-            answerLabel.heightAnchor.constraint(equalTo: cluesLabel.heightAnchor)
+            answerLabel.heightAnchor.constraint(equalTo: cluesLabel.heightAnchor),
+            
+            currentAnswer.centerXAnchor.constraint(equalTo: view.layoutMarginsGuide.centerXAnchor),
+            currentAnswer.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 0.5),
+            currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20),
+            
+            submit.topAnchor.constraint(equalTo: currentAnswer.bottomAnchor),
+            submit.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -100),
+            submit.heightAnchor.constraint(equalToConstant: 44),
+            
+            clear.centerYAnchor.constraint(equalTo: submit.centerYAnchor),
+            clear.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
+            clear.heightAnchor.constraint(equalToConstant: 44),
+            
+            
         
         ])
     }
