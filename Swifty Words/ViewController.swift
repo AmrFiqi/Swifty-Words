@@ -182,6 +182,12 @@ class ViewController: UIViewController {
                 present(ac, animated: true)
             }
         }
+        else {
+            let ac = UIAlertController(title: "Wrong!", message: "This is not a correct word", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Try Again", style: .default))
+            present(ac, animated: true)
+            
+        }
     }
     
     func loadLevel(){
