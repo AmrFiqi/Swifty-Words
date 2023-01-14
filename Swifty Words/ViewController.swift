@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         scoreLabel = UILabel()
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.textAlignment = .right
-        scoreLabel.text = "Score: 0"
+        scoreLabel.text = "Score: \(score)"
         view.addSubview(scoreLabel)
         
         // Clues label specs
@@ -139,17 +139,48 @@ class ViewController: UIViewController {
         loadLevel()
     }
 
-    
+    // Show the button the user tapped in currentAnswer and hide it from buttons list
     @objc func letterTapped (_ sender: UIButton){
+        guard let buttonTitle = sender.titleLabel?.text else {return}
         
+        currentAnswer.text = currentAnswer.text?.appending(buttonTitle)
+        activatedButtons.append(sender)
+        sender.isHidden = true
     }
     
+    // Clear the answer and show all the buttons
     @objc func clearTapped (_ sender: UIButton){
+        currentAnswer.text = ""
         
+        for button in activatedButtons {
+            button.isHidden = false
+        }
+        activatedButtons.removeAll()
     }
     
+    // Check if the answer is correct
     @objc func submitTapped (_ sender: UIButton){
-        
+        guard let answerText = currentAnswer.text else {return}
+
+        if let solutionPosition = solutions.firstIndex(of: answerText){
+            activatedButtons.removeAll()
+            
+            print(solutionPosition)
+            var splitAnswers =  answerLabel.text?.components(separatedBy: "\n")
+            splitAnswers?[solutionPosition] = answerText
+            answerLabel.text = splitAnswers?.joined(separator: "\n")
+            
+            currentAnswer.text = ""
+            score += 1
+            
+            scoreLabel.text = ("Score: \(score)")
+            
+            if score % 7 == 0 {
+                let ac = UIAlertController(title: "Well done!!", message: "Ready to move to the next level?!", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Yes!!", style: .default, handler: levelUp))
+                present(ac, animated: true)
+            }
+        }
     }
     
     func loadLevel(){
@@ -167,11 +198,11 @@ class ViewController: UIViewController {
                     let answer = parts[0]
                     let clue = parts[1]
                     
-                    clueString += "(\(index + 1). \(clue)\n"
+                    clueString += "\(index + 1). \(clue)\n"
                     
                     let solution = answer.replacingOccurrences(of: "|", with: "")
                     solutionString += "\(solution.count) letters\n"
-                    solutions.append(solutionString)
+                    solutions.append(solution)
                     
                     let bits = answer.components(separatedBy: "|")
                     letterBits += bits
@@ -188,7 +219,16 @@ class ViewController: UIViewController {
                 letterButtons[i].setTitle(letterBits[i], for: .normal)
             }
         }
+    }
+    
+    func levelUp (_ action: UIAlertAction){
+        level += 1
+        solutions.removeAll(keepingCapacity: true)
+        loadLevel()
         
+        for button in letterButtons {
+            button.isHidden = false
+        }
     }
 }
 
